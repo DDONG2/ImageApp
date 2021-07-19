@@ -7,7 +7,7 @@ import retrofit2.Response
 
 class ImageRepositoryImpl :ImageRepository{
 
-    override suspend fun requestImageApi(title: String, page: Int): Response<KakaoImageResponse<ImageVO>>
+    override suspend fun requestImageApi(title: String, page: Int): Response<KakaoImageResponse>
     = RetrofitClient.get().searchImage(title = title, page = page)
 
 }

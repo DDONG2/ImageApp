@@ -2,10 +2,10 @@ package com.example.imageapp.model.vo
 
 import com.google.gson.annotations.SerializedName
 
-data class KakaoImageResponse<T>(
+data class KakaoImageResponse(
     @SerializedName("meta")
     val meta: MetaVO,
 
     @SerializedName("documents")
-    val documents: List<T>
+    val documents: List<ImageVO>
 )

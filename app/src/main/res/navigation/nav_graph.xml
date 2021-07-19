@@ -15,5 +15,11 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.imageapp.view.DetailFragment"
-        android:label="DetailFragment" />
+        android:label="DetailFragment">
+        <argument
+            android:name="imageVO"
+            app:argType="com.example.imageapp.model.vo.ImageVO"
+            app:nullable="true"/>
+    </fragment>
+
 </navigation>

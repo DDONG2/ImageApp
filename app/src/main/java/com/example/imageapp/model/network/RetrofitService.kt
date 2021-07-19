@@ -19,6 +19,6 @@ interface RetrofitService {
     suspend fun searchImage(@Query("query") title: String,
                               @Query("sort") sort: String = REQUEST_IMAGE_LIST_TYPE_DEFAULT,
                               @Query("page") page: Int,
-                              @Query("size") size: Int = REQUEST_IMAGE_LIST_SIZE_DEFAULT): Response<KakaoImageResponse<ImageVO>>
+                              @Query("size") size: Int = REQUEST_IMAGE_LIST_SIZE_DEFAULT): Response<KakaoImageResponse>
 
 }
