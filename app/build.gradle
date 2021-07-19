@@ -75,8 +75,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
 
     // RX
-    //rxjava
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.1'
+
     //rxkotlin
     implementation 'io.reactivex.rxjava3:rxkotlin:3.0.1'
     //rxAndroid

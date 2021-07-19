@@ -5,9 +5,10 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/fullCardView"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_margin="3dp"
+        android:layout_height="150dp"
+        android:layout_margin="2dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="8dp">
 
@@ -16,9 +17,10 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imgview"
+                android:id="@+id/imgView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -7,9 +7,7 @@ import com.example.imageapp.BaseViewModel
 import com.example.imageapp.model.repository.ImageRepository
 import com.example.imageapp.model.repository.ImageRepositoryImpl
 import com.example.imageapp.model.vo.ImageVO
-import com.example.imageapp.model.vo.KakaoImageResponse
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -81,7 +79,7 @@ class MainViewModel : BaseViewModel() {
     }
 
 
-        private fun onError(message: String) {
+    private fun onError(message: String) {
         _ErrorMessage.value = message
     }
 }

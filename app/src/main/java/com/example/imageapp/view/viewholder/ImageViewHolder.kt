@@ -24,9 +24,11 @@ class ImageViewHolder (itemView: View, private val context: Context, private val
             Glide.with(context)
                 .load(it)
                 .error(R.drawable.ic_launcher_background)
-                .into(binding.imgview)
+                .into(binding.imgView)
         }
-
+        binding.fullCardView.setOnClickListener{
+            item?.let { it -> ItemClickListener(it) }
+        }
 
 
     }

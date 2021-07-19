@@ -15,6 +15,7 @@ import com.example.imageapp.model.vo.ImageVO
 import com.example.imageapp.view.adapter.ImageRecyclerAdapter
 import com.example.imageapp.viewmodel.MainViewModel
 import com.jakewharton.rxbinding4.widget.textChanges
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
@@ -30,13 +31,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
     override val viewModel: MainViewModel
         get() = ViewModelProvider(this).get(MainViewModel::class.java)
 
-
     override val layoutId: Int
         get() = R.layout.fragment_home
 
     private lateinit var mainAdapter: ImageRecyclerAdapter
 
-    private lateinit var SearchText :String
+    private var SearchText: String = ""
 
     private val ItemClickListener: (ImageVO) -> Unit = {
         HomeFragmentDirections.actionHomeFragmentToDetailFragment(it).navigate()
@@ -47,11 +47,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
 
         viewModel.ImageLiveData.observe(this, Observer {
 
-            if(it.size > 0){
+            if (it.size > 0) {
                 mainAdapter.setImageList(it)
                 dataBinding.recyclerView.visibility = View.VISIBLE
                 dataBinding.emptyTextView.visibility = View.GONE
-            }else{
+            } else {
                 mainAdapter.setImageList(it)
                 dataBinding.recyclerView.visibility = View.GONE
                 dataBinding.emptyTextView.visibility = View.VISIBLE
@@ -76,15 +76,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
             adapter = mainAdapter
         }
 
-        dataBinding.loadingProgressBar.visibility = View.VISIBLE
-
         val subscription: Disposable =
-            dataBinding.SearchEditText.textChanges().debounce(TIME_DEBOUNCE_MILLISECONDS, TimeUnit.MILLISECONDS)
+            dataBinding.SearchEditText.textChanges()
+                .debounce(TIME_DEBOUNCE_MILLISECONDS, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onNext = {
-                        SearchText = it.toString()
-                        viewModel.getImageInfo(it.toString())
+                        if (SearchText != it.toString() && it != "") {
+
+                            dataBinding.loadingProgressBar.visibility = View.VISIBLE
+
+                            SearchText = it.toString()
+                            viewModel.getImageInfo(it.toString())
+                        }
                     }
                 )
 
@@ -92,8 +97,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                val lastVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
-                val itemTotalCount = recyclerView.adapter!!.itemCount-1
+                val lastVisibleItemPosition =
+                    (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                val itemTotalCount = recyclerView.adapter!!.itemCount - 1
                 // 스크롤이 끝에 도달했는지 확인
                 if (!dataBinding.recyclerView.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
 
