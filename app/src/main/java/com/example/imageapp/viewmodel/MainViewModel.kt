@@ -21,8 +21,8 @@ class MainViewModel : BaseViewModel() {
         imageRepository = ImageRepositoryImpl()
     }
 
-    private val _ImageLiveData = MutableLiveData<KakaoImageResponse>()
-    val ImageLiveData: LiveData<KakaoImageResponse>
+    private val _ImageLiveData = MutableLiveData<List<ImageVO>>()
+    val ImageLiveData: LiveData<List<ImageVO>>
         get() = _ImageLiveData
 
 
@@ -30,15 +30,25 @@ class MainViewModel : BaseViewModel() {
     val ErrorMessage: LiveData<String>
         get() = _ErrorMessage
 
+    private val ImageAllList = mutableListOf<ImageVO>()
 
+    private var pageNumber: Int = 1
 
-    fun getImageInfo(title: String, page: Int) {
+    fun getImageInfo(title: String) {
+
+        pageNumber = 1
+        ImageAllList.clear()
+
         viewModelScope.launch {
-            val response = imageRepository.requestImageApi(title, page)
+            val response = imageRepository.requestImageApi(title, pageNumber)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
 
-                    _ImageLiveData.value = response.body()
+                    response.body()?.documents?.forEach() {
+                        ImageAllList.add(it)
+                    }
+
+                    _ImageLiveData.value = ImageAllList
 
                 } else {
                     onError("Error : ${response.message()} ")
@@ -48,7 +58,30 @@ class MainViewModel : BaseViewModel() {
 
     }
 
-    private fun onError(message: String) {
+    fun getMoreImageInfo(title: String) {
+
+        pageNumber++
+
+        viewModelScope.launch {
+            val response = imageRepository.requestImageApi(title, pageNumber)
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+
+                    response.body()?.documents?.forEach {
+                        ImageAllList.add(it)
+                    }
+
+                    _ImageLiveData.value = ImageAllList
+
+                } else {
+                    onError("Error : ${response.message()} ")
+                }
+            }
+        }
+    }
+
+
+        private fun onError(message: String) {
         _ErrorMessage.value = message
     }
 }

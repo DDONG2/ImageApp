@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class KakaoImageResponse(
     @SerializedName("meta")
-    val meta: MetaVO,
+    var meta: MetaVO,
 
     @SerializedName("documents")
-    val documents: List<ImageVO>
+    var documents: List<ImageVO>
 )
